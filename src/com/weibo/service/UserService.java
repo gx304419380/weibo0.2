@@ -61,4 +61,16 @@ public class UserService {
     public void save(User user) throws SQLException {
         dao.save(user);
     }
+
+    public List<Integer> getFollowIdList(User user) throws SQLException {
+        return dao.getFollowId(user);
+    }
+
+    public void followById(Integer uid, Integer fid) throws SQLException {
+        dao.followById(uid, fid);
+    }
+
+    public void unFollowById(Integer uid, Integer fid) throws SQLException {
+        dao.unFollowById(uid, fid);
+    }
 }

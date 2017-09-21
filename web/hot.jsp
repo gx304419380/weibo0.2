@@ -21,7 +21,7 @@
             padding-left: 30px;
             padding-right: 30px;
             margin-top: -30px;
-            background:url(../../../img/flowers/img12.jpg);
+            background:url(img/flowers/img12.jpg);
             background-size:100%;
             background-repeat:repeat-y;
         }
@@ -33,6 +33,12 @@
             else
                 $(obj).find("span").removeClass("glyphicon-heart").addClass("glyphicon-heart-empty");
         }
+        function unfollow1(obj) {
+            $(obj).addClass("btn-danger").removeClass("btn-default").text("取消关注");
+        }
+        function unfollow2(obj) {
+            $(obj).removeClass("btn-danger").addClass("btn-default").text("已关注");
+        }
     </script>
 </head>
 <body style="font-family: 微软雅黑">
@@ -42,7 +48,7 @@
         <div class="page-header row">
             <h1>
                 <c:if test="${user != null}">
-                亲爱的：${user.nickname}，
+                    亲爱的：${user.nickname}，
                 </c:if>
                 欢迎来到微博！
             </h1>
@@ -76,10 +82,38 @@
                         <div class="row">
                             <div class="panel panel-info">
                                 <div class="panel-heading">
-                                    <span href="#" class="btn btn-link" style="margin: -6px 0px -5px -10px">
+                                    <span href="#" class="btn btn-link" style="margin: -6px -10px -5px -10px">
                                             ${blah.nickname}
                                     </span>
-                                    <a href="#" class="btn btn-xs btn-success glyphicon glyphicon-ok" style="margin-top: -6px; margin-bottom: -3px"></a>
+                                        <%--<a href="#" class="btn btn-xs btn-success glyphicon glyphicon-ok" style="margin-top: -6px; margin-bottom: -3px"></a>--%>
+                                    <%
+                                        boolean isFollowed = false;
+                                    %>
+                                    <c:if test="${user != null}">
+                                        <c:forEach var="id" items="${user.followIdList}">
+                                            <c:if test="${id == blah.uid}">
+                                                <% isFollowed = true; %>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:if>
+
+                                    <%
+                                        if (isFollowed) {
+                                    %>
+                                    <a href="user?method=unFollow&id=${blah.uid}" onmouseover="unfollow1(this)" onmouseleave="unfollow2(this)" class="btn btn-xs btn-default" style="margin-top: -6px; margin-bottom: -3px">
+                                        已关注
+                                    </a>
+                                    <%
+                                    } else {
+                                    %>
+                                    <c:if test="${user == null || user.id != blah.id}">
+                                        <a href="user?method=follow&id=${blah.uid}" class="btn btn-xs btn-success" style="margin-top: -6px; margin-bottom: -3px">
+                                            关注
+                                        </a>
+                                    </c:if>
+                                    <%
+                                        }
+                                    %>
                                     <span style="float:right">
                                         <fmt:formatDate value="${blah.bdate}" pattern="yyyy-MM-dd hh:mm:ss"></fmt:formatDate>
                                     </span>

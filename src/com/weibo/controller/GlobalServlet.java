@@ -38,7 +38,7 @@ public class GlobalServlet extends HttpServlet {
             request.getRequestDispatcher("/error.jsp").forward(request, response);
             return;
         }
-        //get and involve the method
+
         String result = null;
         try {
             switch (methodName) {
@@ -77,7 +77,7 @@ public class GlobalServlet extends HttpServlet {
         }
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPage", totalPage);
-        List<Blah> blahs = blahService.getAllBlahs(1, 10);
+        List<Blah> blahs = blahService.getAllBlahs(page, 10);
         request.setAttribute("hotBlahs",blahs);
         return "hot.jsp";
     }

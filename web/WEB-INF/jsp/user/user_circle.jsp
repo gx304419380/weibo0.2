@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -32,6 +33,12 @@
                 $(obj).find("span").removeClass("glyphicon-heart-empty").addClass("glyphicon-heart");
             else
                 $(obj).find("span").removeClass("glyphicon-heart").addClass("glyphicon-heart-empty");
+        }
+        function unfollow1(obj) {
+            $(obj).addClass("btn-danger").removeClass("btn-default").text("取消关注");
+        }
+        function unfollow2(obj) {
+            $(obj).removeClass("btn-danger").addClass("btn-default").text("已关注");
         }
     </script>
 </head>
@@ -71,10 +78,16 @@
                         <div class="row">
                             <div class="panel panel-info">
                                 <div class="panel-heading">
-                                    <span href="#" class="btn btn-link" style="margin: -6px 0px -5px -10px">
-                                            ${user.nickname}
+                                    <span href="#" class="btn btn-link" style="margin: -6px -10px -5px -10px">
+                                            ${blah.nickname}
                                     </span>
-                                    <a href="#" class="btn btn-xs btn-success glyphicon glyphicon-ok" style="margin-top: -6px; margin-bottom: -3px"></a>
+                                        <%--<a href="#" class="btn btn-xs btn-success glyphicon glyphicon-ok" style="margin-top: -6px; margin-bottom: -3px"></a>--%>
+                                    <c:if test="${user.id != blah.uid}">
+                                        <a href="user?method=unFollow&id=${blah.uid}" onmouseover="unfollow1(this)" onmouseleave="unfollow2(this)" class="btn btn-xs btn-default" style="margin-top: -6px; margin-bottom: -3px">
+                                            已关注
+                                        </a>
+                                    </c:if>
+
                                     <span style="float:right">
                                         <fmt:formatDate value="${blah.bdate}" pattern="yyyy-MM-dd hh:mm:ss"></fmt:formatDate>
                                     </span>

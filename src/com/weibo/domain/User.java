@@ -11,6 +11,7 @@ public class User {
     private String email;
     private Date rdate;
     private List<Blah> blahs;
+    private List<Integer> followIdList;
 
     public User() {
     }
@@ -77,6 +78,14 @@ public class User {
 
     public void setBlahs(List<Blah> blahs) {
         this.blahs = blahs;
+    }
+
+    public List<Integer> getFollowIdList() {
+        return followIdList;
+    }
+
+    public void setFollowIdList(List<Integer> followIdList) {
+        this.followIdList = followIdList;
     }
 
     @Override

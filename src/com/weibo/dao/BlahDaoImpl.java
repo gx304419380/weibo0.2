@@ -38,7 +38,7 @@ public class BlahDaoImpl implements BlahDao {
     public List<Blah> getBlahs(User user, int page, int count) throws SQLException {
         QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
         int start = (page - 1) * count;
-        String sql = "select * from blah where uid = ? and pid = -1 order by bdate desc limit ?,?";
+        String sql = "select * from blah b,user u where u.id=b.uid and uid = ? and pid = -1 order by bdate desc limit ?,?";
         List<Blah> blahs = null;
         blahs = qr.query(sql,
                 new BeanListHandler<Blah>(Blah.class),
@@ -56,7 +56,6 @@ public class BlahDaoImpl implements BlahDao {
 
         Object totalCount = 0;
         totalCount =  qr.query(sql, new ScalarHandler(), user.getId());
-
 
         return Integer.parseInt(totalCount.toString());
     }

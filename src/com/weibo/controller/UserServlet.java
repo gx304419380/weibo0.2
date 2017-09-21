@@ -40,7 +40,7 @@ public class UserServlet extends HttpServlet {
         //if the method name is null, forward to the error page
         if (methodName == null) {
             errorMessage.add("Error parameter!");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("error.jsp").forward(request, response);
             return;
         }
 
@@ -61,13 +61,12 @@ public class UserServlet extends HttpServlet {
             }
         } catch (NoSuchMethodException e) {
             errorMessage.add("No such method");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
-            e.printStackTrace();
+            request.getRequestDispatcher("error.jsp").forward(request, response);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            errorMessage.add(e.getCause().getMessage());
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            errorMessage.add(e.getCause().toString());
+            request.getRequestDispatcher("error.jsp").forward(request, response);
             e.printStackTrace();
         }
     }
@@ -101,6 +100,7 @@ public class UserServlet extends HttpServlet {
         user.setPassword(request.getParameter("password"));
         User existUser = userService.getUser(user);
         if (existUser != null) {
+            existUser.setFollowIdList(userService.getFollowIdList(existUser));
             request.getSession().setAttribute("user", existUser);
             request.setAttribute("dealMethod", "sendRedirect");
             return "user?method=home";
@@ -198,5 +198,34 @@ public class UserServlet extends HttpServlet {
         }
         blahService.save(blah);
         return "user?method=home";
+    }
+
+    private String follow(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        User user = (User)request.getSession().getAttribute("user");
+        int id = Integer.parseInt(request.getParameter("id"));
+        System.out.println("follow");
+        System.out.println(user);
+        System.out.println(id);
+        List<Integer> followIdList = userService.getFollowIdList(user);
+        if (!followIdList.contains(id)) {
+            userService.followById(user.getId(), id);
+            user.getFollowIdList().add(id);
+        }
+
+        return "";
+    }
+
+    private String unFollow(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        User user = (User)request.getSession().getAttribute("user");
+        int id = Integer.parseInt(request.getParameter("id"));
+        System.out.println("unFollow");
+        System.out.println(user);
+        System.out.println(id);
+        if (user.getFollowIdList().contains(id)) {
+            userService.unFollowById(user.getId(), id);
+            user.getFollowIdList().remove((Integer)id);
+        }
+
+        return "";
     }
 }
