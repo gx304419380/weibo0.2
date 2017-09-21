@@ -60,4 +60,38 @@ public class BlahDaoImpl implements BlahDao {
 
         return Integer.parseInt(totalCount.toString());
     }
+
+    @Override
+    public void deleteById(int blahId) throws SQLException {
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        String sql = "delete from blah where id = ?";
+        qr.update(sql, blahId);
+    }
+
+    @Override
+    public List<Blah> getAllBlahs(int page, int count) throws SQLException {
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        int start = (page - 1) * count;
+        String sql = "select * from blah b,user u " +
+                "where u.id=b.uid and " +
+                "pid = -1 " +
+                "order by bdate desc " +
+                "limit ?,?";
+        List<Blah> blahs = null;
+        blahs = qr.query(sql,
+                new BeanListHandler<Blah>(Blah.class),
+                start,
+                count);
+
+        return blahs;
+    }
+
+    @Override
+    public int getAllBlahsCount() throws SQLException {
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        String sql = "select count(*) from blah where pid = -1";
+        Object count = 0;
+        count =  qr.query(sql, new ScalarHandler());
+        return Integer.parseInt(count.toString());
+    }
 }

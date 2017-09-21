@@ -47,7 +47,12 @@ public class UserServlet extends HttpServlet {
         //get and involve the method
         try {
             Method method = this.getClass().getDeclaredMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
-            String result = (String) method.invoke(this, request, response);
+
+            //Authority check!
+            String result = checkAuthority(methodName, request);
+            if (result == null)
+                result = (String) method.invoke(this, request, response);
+
             String dealMethod = (String) request.getAttribute("dealMethod");
             if (dealMethod == null) {
                 request.getRequestDispatcher(result).forward(request, response);
@@ -65,6 +70,20 @@ public class UserServlet extends HttpServlet {
             request.getRequestDispatcher("/error.jsp").forward(request, response);
             e.printStackTrace();
         }
+    }
+
+    private String checkAuthority(String methodName, HttpServletRequest request) {
+        Object user = request.getSession().getAttribute("user");
+        if (user == null) {
+            if (!methodName.equals("login")
+                    && !methodName.equals("loginInput")
+                    && !methodName.equals("register")
+                    && !methodName.equals("registerInput")) {
+                request.setAttribute("dealMethod", "sendRedirect");
+                return "user?method=loginInput";
+            }
+        }
+        return null;
     }
 
     private String loginInput(HttpServletRequest request, HttpServletResponse response) {
@@ -113,10 +132,6 @@ public class UserServlet extends HttpServlet {
 
     private String circle(HttpServletRequest request, HttpServletResponse response) throws SQLException {
         User user = (User)request.getSession().getAttribute("user");
-        if (user == null) {
-            return "/WEB-INF/jsp/user/user_login.jsp";
-        }
-
         String pageStr = request.getParameter("page");
         int page = 1;
         if (pageStr != null) {
@@ -139,9 +154,6 @@ public class UserServlet extends HttpServlet {
 
     private String home(HttpServletRequest request, HttpServletResponse response) throws SQLException {
         User user = (User)request.getSession().getAttribute("user");
-        if (user == null) {
-            return "/WEB-INF/jsp/user/user_login.jsp";
-        }
         String pageStr = request.getParameter("page");
         int page = 1;
         if (pageStr != null) {
@@ -159,6 +171,13 @@ public class UserServlet extends HttpServlet {
         List<Blah> blahs = blahService.getBlahs(user, page, 10);
         user.setBlahs(blahs);
         return "/WEB-INF/jsp/user/user_home.jsp";
+    }
+
+    private String deleteBlah(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        int blahId = Integer.parseInt(request.getParameter("blahId"));
+        //whether need to check the authority here?
+        blahService.deleteById(blahId);
+        return "user?method=home";
     }
 
     private String publish(HttpServletRequest request, HttpServletResponse response) throws SQLException {

@@ -8,6 +8,7 @@ public class Blah {
     private String content;
     private Date bdate;
     private int pid;
+    private String nickname;
 
     public Blah() {
     }
@@ -52,6 +53,14 @@ public class Blah {
         this.pid = pid;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     @Override
     public String toString() {
         return "Blah{" +
@@ -60,6 +69,7 @@ public class Blah {
                 ", content='" + content + '\'' +
                 ", bdate=" + bdate +
                 ", pid=" + pid +
+                ", nickname='" + nickname + '\'' +
                 '}';
     }
 }

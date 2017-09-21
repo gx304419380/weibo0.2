@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="weibo@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.4">
+    <root id="1"/>
+    <schema id="2" parent="1" name="weibo">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="bbs"/>
+    <schema id="4" parent="1" name="bbs2017"/>
+    <schema id="5" parent="1" name="customer"/>
+    <schema id="6" parent="1" name="hibernate"/>
+    <schema id="7" parent="1" name="information_schema"/>
+    <schema id="8" parent="1" name="itcast"/>
+    <schema id="9" parent="1" name="mysql"/>
+    <schema id="10" parent="1" name="performance_schema"/>
+    <schema id="11" parent="1" name="practise"/>
+    <schema id="12" parent="1" name="shop"/>
+    <schema id="13" parent="1" name="shopping"/>
+    <schema id="14" parent="1" name="spring"/>
+    <schema id="15" parent="1" name="sys"/>
+    <schema id="16" parent="1" name="test"/>
+    <schema id="17" parent="1" name="test1"/>
+    <schema id="18" parent="1" name="test2"/>
+    <table id="19" parent="2" name="blah"/>
+    <table id="20" parent="2" name="relationship"/>
+    <table id="21" parent="2" name="user"/>
+    <column id="22" parent="19" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="23" parent="19" name="uid">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="24" parent="19" name="content">
+      <Position>3</Position>
+      <DataType>varchar(140)|0</DataType>
+    </column>
+    <column id="25" parent="19" name="bdate">
+      <Position>4</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="26" parent="19" name="pid">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <key id="27" parent="19" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="28" parent="20" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="29" parent="20" name="uid">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="30" parent="20" name="fid">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <key id="31" parent="20" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="32" parent="21" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="33" parent="21" name="username">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="34" parent="21" name="password">
+      <Position>3</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="35" parent="21" name="email">
+      <Position>4</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <column id="36" parent="21" name="rdate">
+      <Position>5</Position>
+      <DataType>date|0</DataType>
+    </column>
+    <column id="37" parent="21" name="nickname">
+      <Position>6</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <key id="38" parent="21" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>

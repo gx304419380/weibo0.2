@@ -35,7 +35,7 @@
         }
     </script>
 </head>
-<body>
+<body style="font-family: 微软雅黑">
 <div class="container-fluid">
     <jsp:include page="../../../menu.jsp"></jsp:include>
     <div id="div-main" class="row">
@@ -50,13 +50,13 @@
 
             <nav>
                 <ul class="pager">
-                    <li class="previous"><a href="user?method=home&page=${currentPage - 1}">&larr; 上一页</a></li>
+                    <li class="previous"><a href="user?method=circle&page=${currentPage - 1}">&larr; 上一页</a></li>
                     <li>
                         <button class="btn btn-primary" type="button">
                             第${currentPage}页
                         </button>
                     </li>
-                    <li class="next"><a href="user?method=home&page=${currentPage + 1}">下一页 &rarr;</a></li>
+                    <li class="next"><a href="user?method=circle&page=${currentPage + 1}">下一页 &rarr;</a></li>
                 </ul>
             </nav>
 
@@ -71,12 +71,13 @@
                         <div class="row">
                             <div class="panel panel-info">
                                 <div class="panel-heading">
-                            <span>
-                                    ${user.nickname}
-                            </span>
+                                    <span href="#" class="btn btn-link" style="margin: -6px 0px -5px -10px">
+                                            ${user.nickname}
+                                    </span>
+                                    <a href="#" class="btn btn-xs btn-success glyphicon glyphicon-ok" style="margin-top: -6px; margin-bottom: -3px"></a>
                                     <span style="float:right">
-                                    <fmt:formatDate value="${blah.bdate}" pattern="yyyy-MM-dd hh:mm:ss"></fmt:formatDate>
-                            </span>
+                                        <fmt:formatDate value="${blah.bdate}" pattern="yyyy-MM-dd hh:mm:ss"></fmt:formatDate>
+                                    </span>
                                     <span style="clear: both"></span>
                                 </div>
                                 <div class="panel-body">
@@ -94,21 +95,21 @@
             <div class="row text-center" style="height: 200px">
                 <nav>
                     <ul class="pagination">
-                        <li><a href="user?method=home&page=${currentPage - 1}">&laquo;</a></li>
+                        <li><a href="user?method=circle&page=${currentPage - 1}">&laquo;</a></li>
                         <c:if test="${currentPage - 2 >= 1}">
-                            <li><a href="user?method=home&page=${currentPage - 2}">${currentPage - 2}</a></li>
+                            <li><a href="user?method=circle&page=${currentPage - 2}">${currentPage - 2}</a></li>
                         </c:if>
                         <c:if test="${currentPage - 1 >= 1}">
-                            <li><a href="user?method=home&page=${currentPage - 1}">${currentPage - 1}</a></li>
+                            <li><a href="user?method=circle&page=${currentPage - 1}">${currentPage - 1}</a></li>
                         </c:if>
                         <li class="active"><a href="#">${currentPage}<span class="sr-only">(current)</span></a></li>
                         <c:if test="${currentPage + 1 <= totalPage}">
-                            <li><a href="user?method=home&page=${currentPage + 1}">${currentPage + 1}</a></li>
+                            <li><a href="user?method=circle&page=${currentPage + 1}">${currentPage + 1}</a></li>
                         </c:if>
                         <c:if test="${currentPage + 2 <= totalPage}">
-                            <li><a href="user?method=home&page=${currentPage + 2}">${currentPage + 2}</a></li>
+                            <li><a href="user?method=circle&page=${currentPage + 2}">${currentPage + 2}</a></li>
                         </c:if>
-                        <li><a href="user?method=home&page=${currentPage + 1}">&raquo;</a></li>
+                        <li><a href="user?method=circle&page=${currentPage + 1}">&raquo;</a></li>
                     </ul>
                 </nav>
             </div>

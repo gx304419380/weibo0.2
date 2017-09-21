@@ -35,9 +35,13 @@
                 $(obj).find("span").removeClass("glyphicon-heart").addClass("glyphicon-heart-empty");
 
         }
+        
+        function confirmDelete() {
+            return confirm("确认删除？");
+        }
     </script>
 </head>
-<body>
+<body style="font-family: 微软雅黑">
 <div class="container-fluid">
     <jsp:include page="../../../menu.jsp"></jsp:include>
     <div id="div-main" class="row">
@@ -99,6 +103,7 @@
                             &nbsp;&nbsp;${blah.content}
                         </div>
                         <div class="panel-footer text-right">
+                            <a href="user?method=deleteBlah&blahId=${blah.id}" onclick="return confirmDelete()" class="btn btn-sm" style="background-color: #449d44;color: white;">删除&nbsp;<span class="glyphicon glyphicon-trash"></span></a>
                             <a href="#" class="btn btn-sm" style="background-color: #44bceb;color: white;">评论&nbsp;<span class="glyphicon glyphicon-comment"></span></a>
                             <a class="btn btn-sm" id="like-${blah.id}" onclick="like(this)" style="background-color: #eb2b1d;color: white;">点赞&nbsp;<span class="glyphicon glyphicon-heart-empty"></span></a>
                         </div>

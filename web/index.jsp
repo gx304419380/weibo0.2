@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <script type="text/javascript" src="js/jquery-1.11.0.min.js" ></script>
     <script type="text/javascript" src="js/bootstrap.js" ></script>
-    <title>$Title$</title>
+    <title>Welcome to weibo</title>
     <style>
         #div-cont {
             padding-top: 120px;
@@ -23,7 +23,7 @@
         }
     </style>
 </head>
-<body>
+<body style="font-family: 微软雅黑">
 <div class="container-fluid">
     <jsp:include page="menu.jsp"></jsp:include>
     <%----%>

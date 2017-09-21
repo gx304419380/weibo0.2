@@ -14,5 +14,11 @@ public interface BlahDao {
     List<Blah> getBlahs(User user, int page, int count) throws SQLException;
 
     int getTotalCount(User user) throws SQLException;
+
+    void deleteById(int blahId) throws SQLException;
+
+    List<Blah> getAllBlahs(int page, int count) throws SQLException;
+
+    int getAllBlahsCount() throws SQLException;
 }
 

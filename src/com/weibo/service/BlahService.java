@@ -33,4 +33,16 @@ public class BlahService {
     public int getTotalCount(User user) throws SQLException {
         return dao.getTotalCount(user);
     }
+
+    public void deleteById(int blahId) throws SQLException {
+        dao.deleteById(blahId);
+    }
+
+    public List<Blah> getAllBlahs(int page, int count) throws SQLException {
+        return dao.getAllBlahs(page, count);
+    }
+
+    public int getAllBlahsCount() throws SQLException {
+        return dao.getAllBlahsCount();
+    }
 }

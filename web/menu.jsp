@@ -26,7 +26,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="user?method=home">我的</a></li>
                     <li><a href="user?method=circle">圈子</a></li>
-                    <li><a href="hot.jsp">热门</a></li>
+                    <li><a href="global?method=hot">热门</a></li>
                     <li><a href="#">榜单</a></li>
                     <li><a href="#">本地</a></li>
                 </ul>

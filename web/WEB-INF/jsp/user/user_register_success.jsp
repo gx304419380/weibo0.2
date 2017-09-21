@@ -14,7 +14,7 @@
     <script type="text/javascript" src="js/bootstrap.js" ></script>
     <title>注册成功</title>
 </head>
-<body>
+<body style="font-family: 微软雅黑">
 <div class="container-fluid">
     <jsp:include page="../../../menu.jsp"></jsp:include>
     <%--main--%>
