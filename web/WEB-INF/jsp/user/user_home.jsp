@@ -27,12 +27,12 @@
         }
     </style>
     <script>
-        function like(id) {
-            var btn = "like-" + id;
-            if ($("#" + btn).find("span").hasClass("glyphicon-heart-empty"))
-                $("#" + btn).find("span").removeClass("glyphicon-heart-empty").addClass("glyphicon-heart");
+        function like(obj) {
+
+            if ($(obj).find("span").hasClass("glyphicon-heart-empty"))
+                $(obj).find("span").removeClass("glyphicon-heart-empty").addClass("glyphicon-heart");
             else
-                $("#" + btn).find("span").removeClass("glyphicon-heart").addClass("glyphicon-heart-empty");
+                $(obj).find("span").removeClass("glyphicon-heart").addClass("glyphicon-heart-empty");
 
         }
     </script>
@@ -100,7 +100,7 @@
                         </div>
                         <div class="panel-footer text-right">
                             <a href="#" class="btn btn-sm" style="background-color: #44bceb;color: white;">评论&nbsp;<span class="glyphicon glyphicon-comment"></span></a>
-                            <a class="btn btn-sm" id="like-${blah.id}" onclick="like(${blah.id})" style="background-color: #eb2b1d;color: white;">点赞&nbsp;<span class="glyphicon glyphicon-heart-empty"></span></a>
+                            <a class="btn btn-sm" id="like-${blah.id}" onclick="like(this)" style="background-color: #eb2b1d;color: white;">点赞&nbsp;<span class="glyphicon glyphicon-heart-empty"></span></a>
                         </div>
                     </div>
                 </div>

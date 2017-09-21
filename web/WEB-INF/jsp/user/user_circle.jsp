@@ -26,6 +26,14 @@
             background-repeat:repeat-y;
         }
     </style>
+    <script>
+        function like(obj) {
+            if ($(obj).find("span").hasClass("glyphicon-heart-empty"))
+                $(obj).find("span").removeClass("glyphicon-heart-empty").addClass("glyphicon-heart");
+            else
+                $(obj).find("span").removeClass("glyphicon-heart").addClass("glyphicon-heart-empty");
+        }
+    </script>
 </head>
 <body>
 <div class="container-fluid">
@@ -39,21 +47,23 @@
         <div class="col-md-1">
         </div>
         <div class="col-md-10">
+
             <nav>
                 <ul class="pager">
-                    <li class="previous"><a href="user?method=circle&page=${currentPage - 1}">&larr; 上一页</a></li>
+                    <li class="previous"><a href="user?method=home&page=${currentPage - 1}">&larr; 上一页</a></li>
                     <li>
                         <button class="btn btn-primary" type="button">
                             第${currentPage}页
                         </button>
                     </li>
-                    <li class="next"><a href="user?method=circle&page=${currentPage + 1}">下一页 &rarr;</a></li>
+                    <li class="next"><a href="user?method=home&page=${currentPage + 1}">下一页 &rarr;</a></li>
                 </ul>
             </nav>
+
             <c:choose>
                 <c:when test="${empty user.blahs}">
                     <h3>
-                        您或您的好友还没有发表任何微博，赶快号召他们更新微博吧！
+                        你和你的朋友还没有发微博，赶快号召他们加入吧！
                     </h3>
                 </c:when>
                 <c:otherwise>
@@ -73,7 +83,8 @@
                                     &nbsp;&nbsp;${blah.content}
                                 </div>
                                 <div class="panel-footer text-right">
-                                    foot
+                                    <a href="#" class="btn btn-sm" style="background-color: #44bceb;color: white;">评论&nbsp;<span class="glyphicon glyphicon-comment"></span></a>
+                                    <a class="btn btn-sm" id="like-${blah.id}" onclick="like(this)" style="background-color: #eb2b1d;color: white;">点赞&nbsp;<span class="glyphicon glyphicon-heart-empty"></span></a>
                                 </div>
                             </div>
                         </div>
@@ -83,21 +94,21 @@
             <div class="row text-center" style="height: 200px">
                 <nav>
                     <ul class="pagination">
-                        <li><a href="user?method=circle&page=${currentPage - 1}">&laquo;</a></li>
+                        <li><a href="user?method=home&page=${currentPage - 1}">&laquo;</a></li>
                         <c:if test="${currentPage - 2 >= 1}">
-                            <li><a href="user?method=circle&page=${currentPage - 2}">${currentPage - 2}</a></li>
+                            <li><a href="user?method=home&page=${currentPage - 2}">${currentPage - 2}</a></li>
                         </c:if>
                         <c:if test="${currentPage - 1 >= 1}">
-                            <li><a href="user?method=circle&page=${currentPage - 1}">${currentPage - 1}</a></li>
+                            <li><a href="user?method=home&page=${currentPage - 1}">${currentPage - 1}</a></li>
                         </c:if>
                         <li class="active"><a href="#">${currentPage}<span class="sr-only">(current)</span></a></li>
                         <c:if test="${currentPage + 1 <= totalPage}">
-                            <li><a href="user?method=circle&page=${currentPage + 1}">${currentPage + 1}</a></li>
+                            <li><a href="user?method=home&page=${currentPage + 1}">${currentPage + 1}</a></li>
                         </c:if>
                         <c:if test="${currentPage + 2 <= totalPage}">
-                            <li><a href="user?method=circle&page=${currentPage + 2}">${currentPage + 2}</a></li>
+                            <li><a href="user?method=home&page=${currentPage + 2}">${currentPage + 2}</a></li>
                         </c:if>
-                        <li><a href="user?method=circle&page=${currentPage + 1}">&raquo;</a></li>
+                        <li><a href="user?method=home&page=${currentPage + 1}">&raquo;</a></li>
                     </ul>
                 </nav>
             </div>
