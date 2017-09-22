@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: 别点我我怕疼
-  Date: 2017/9/18
-  Time: 11:15
+  Date: 2017/9/21
+  Time: 23:24
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -48,7 +48,9 @@
         <div class="page-header row">
             <h1>
                 <c:if test="${user != null}">
-                    亲爱的：${user.nickname}，</c:if>欢迎来到微博！
+                    亲爱的：${user.nickname}，
+                </c:if>
+                欢迎来到微博！
             </h1>
             <p style="font-size: 14px">————随时随地分享新鲜事</p>
         </div>
@@ -59,24 +61,24 @@
 
             <nav>
                 <ul class="pager">
-                    <li class="previous"><a href="global?method=hot&page=${currentPage - 1}">&larr; 上一页</a></li>
+                    <li class="previous"><a href="global?method=search&page=${currentPage - 1}">&larr; 上一页</a></li>
                     <li>
                         <button class="btn btn-primary" type="button">
                             第${currentPage}页
                         </button>
                     </li>
-                    <li class="next"><a href="global?method=hot&page=${currentPage + 1}">下一页 &rarr;</a></li>
+                    <li class="next"><a href="global?method=search&page=${currentPage + 1}">下一页 &rarr;</a></li>
                 </ul>
             </nav>
 
             <c:choose>
-                <c:when test="${empty hotBlahs}">
+                <c:when test="${empty searchBlahs}">
                     <h3>
-                        你和你的朋友还没有发微博，赶快号召他们加入吧！
+                        对不起，未找到您要搜索的微博和用户。>_<
                     </h3>
                 </c:when>
                 <c:otherwise>
-                    <c:forEach var="blah" items="${hotBlahs}">
+                    <c:forEach var="blah" items="${searchBlahs}">
                         <div class="row">
                             <div class="panel panel-info">
                                 <div class="panel-heading">
@@ -84,7 +86,6 @@
                                             ${blah.nickname}
                                     </span>
                                         <%--<a href="#" class="btn btn-xs btn-success glyphicon glyphicon-ok" style="margin-top: -6px; margin-bottom: -3px"></a>--%>
-
                                     <c:set var="isFollowed" value="false"></c:set>
                                     <c:if test="${user != null}">
                                         <c:forEach var="id" items="${user.followIdList}">
@@ -129,21 +130,21 @@
             <div class="row text-center" style="height: 200px">
                 <nav>
                     <ul class="pagination">
-                        <li><a href="global?method=hot&page=${currentPage - 1}">&laquo;</a></li>
+                        <li><a href="global?method=search&page=${currentPage - 1}">&laquo;</a></li>
                         <c:if test="${currentPage - 2 >= 1}">
-                            <li><a href="global?method=hot&page=${currentPage - 2}">${currentPage - 2}</a></li>
+                            <li><a href="global?method=search&page=${currentPage - 2}">${currentPage - 2}</a></li>
                         </c:if>
                         <c:if test="${currentPage - 1 >= 1}">
-                            <li><a href="global?method=hot&page=${currentPage - 1}">${currentPage - 1}</a></li>
+                            <li><a href="global?method=search&page=${currentPage - 1}">${currentPage - 1}</a></li>
                         </c:if>
                         <li class="active"><a href="#">${currentPage}<span class="sr-only">(current)</span></a></li>
                         <c:if test="${currentPage + 1 <= totalPage}">
-                            <li><a href="global?method=hot&page=${currentPage + 1}">${currentPage + 1}</a></li>
+                            <li><a href="global?method=search&page=${currentPage + 1}">${currentPage + 1}</a></li>
                         </c:if>
                         <c:if test="${currentPage + 2 <= totalPage}">
-                            <li><a href="global?method=hot&page=${currentPage + 2}">${currentPage + 2}</a></li>
+                            <li><a href="global?method=search&page=${currentPage + 2}">${currentPage + 2}</a></li>
                         </c:if>
-                        <li><a href="global?method=hot&page=${currentPage + 1}">&raquo;</a></li>
+                        <li><a href="global?method=search&page=${currentPage + 1}">&raquo;</a></li>
                     </ul>
                 </nav>
             </div>
@@ -155,3 +156,4 @@
 </div>
 </body>
 </html>
+

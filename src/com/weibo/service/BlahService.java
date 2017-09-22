@@ -45,4 +45,18 @@ public class BlahService {
     public int getAllBlahsCount() throws SQLException {
         return dao.getAllBlahsCount();
     }
+
+    public int getResultBlahsCount(String keywords) throws SQLException {
+        if (keywords == null || keywords.trim().equals("")) {
+            return getAllBlahsCount();
+        }
+        return dao.getResultBlahsCount(keywords);
+    }
+
+    public List<Blah> getResultBlahs(String keywords, int page, int count) throws SQLException {
+        if (keywords == null || keywords.trim().equals("")) {
+            return getAllBlahs(page, count);
+        }
+        return dao.getResultBlahs(keywords ,page, count);
+    }
 }

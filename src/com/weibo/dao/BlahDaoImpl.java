@@ -8,7 +8,6 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 public class BlahDaoImpl implements BlahDao {
@@ -91,6 +90,36 @@ public class BlahDaoImpl implements BlahDao {
         String sql = "select count(*) from blah where pid = -1";
         Object count = 0;
         count =  qr.query(sql, new ScalarHandler());
+        return Integer.parseInt(count.toString());
+    }
+
+    @Override
+    public List<Blah> getResultBlahs(String keywords, int page, int count) throws SQLException {
+        keywords = "%" + keywords + "%";
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        int start = (page - 1) * count;
+        String sql = "select * from blah b,user u " +
+                "where u.id=b.uid " +
+                "and pid = -1 " +
+                "and content like ? " +
+                "order by bdate desc " +
+                "limit ?,?";
+        List<Blah> blahs = null;
+        blahs = qr.query(sql,
+                new BeanListHandler<Blah>(Blah.class),
+                keywords,
+                start,
+                count);
+        return blahs;
+    }
+
+    @Override
+    public int getResultBlahsCount(String keywords) throws SQLException {
+        keywords = "%" + keywords + "%";
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        String sql = "select count(*) from blah where pid = -1 and content like ?";
+        Object count = 0;
+        count =  qr.query(sql, new ScalarHandler(), keywords);
         return Integer.parseInt(count.toString());
     }
 }

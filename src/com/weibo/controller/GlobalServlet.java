@@ -35,7 +35,7 @@ public class GlobalServlet extends HttpServlet {
         //if the method name is null, forward to the error page
         if (methodName == null) {
             errors.add("Error parameter!");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("error.jsp").forward(request, response);
             return;
         }
 
@@ -48,6 +48,9 @@ public class GlobalServlet extends HttpServlet {
                 case "local":
                     result = local(request, response);
                     break;
+                case "search":
+                    result = search(request, response);
+                    break;
                 default:
                     break;
             }
@@ -58,8 +61,36 @@ public class GlobalServlet extends HttpServlet {
                 response.sendRedirect(result);
             }
         } catch (SQLException e) {
+            System.out.println("sql error");
             e.printStackTrace();
+            errors.add("SQL ERROR");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+
         }
+    }
+
+    private String search(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        String keywords = request.getParameter("keywords");
+        String pageStr = request.getParameter("page");
+        System.out.println("search");
+        System.out.println(keywords);
+        int page = 1;
+        if (pageStr != null) {
+            page = Integer.parseInt(pageStr);
+        }
+        int totalPage = (blahService.getResultBlahsCount(keywords) - 1) / 10 + 1;
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        if (page < 1) {
+            page = 1;
+        }
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPage", totalPage);
+        List<Blah> blahs = blahService.getResultBlahs(keywords, page, 10);
+        request.setAttribute("searchBlahs",blahs);
+        return "search.jsp";
     }
 
     private String hot(HttpServletRequest request, HttpServletResponse response) throws SQLException {

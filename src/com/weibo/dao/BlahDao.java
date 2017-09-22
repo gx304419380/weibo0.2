@@ -20,5 +20,9 @@ public interface BlahDao {
     List<Blah> getAllBlahs(int page, int count) throws SQLException;
 
     int getAllBlahsCount() throws SQLException;
+
+    List<Blah> getResultBlahs(String keywords, int page, int count) throws SQLException;
+
+    int getResultBlahsCount(String keywords) throws SQLException;
 }
 
