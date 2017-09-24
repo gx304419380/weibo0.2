@@ -7,9 +7,7 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class UserDaoImpl implements UserDao {
     @Override
@@ -45,7 +43,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<Integer> getFollowId(User user) throws SQLException {
+    public List<Integer> getFollowIdList(User user) throws SQLException {
         QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
         String sql = "select fid from relationship where uid=?";
         List<Object> list = qr.query(sql,
@@ -70,6 +68,20 @@ public class UserDaoImpl implements UserDao {
         QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
         String sql = "delete from relationship where uid = ? and fid = ?";
         qr.update(sql, uid, fid);
+    }
+
+    @Override
+    public Set<Integer> getLikeBidSet(User user) throws SQLException {
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        String sql = "select bid from like_map where uid=?";
+        List<Object> list = qr.query(sql,
+                new ColumnListHandler(),
+                user.getId());
+        List<Integer> likeBidList = new ArrayList<>();
+        for (Object o : list) {
+            likeBidList.add((Integer) o);
+        }
+        return new HashSet<Integer>(likeBidList);
     }
 
 }

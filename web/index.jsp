@@ -25,7 +25,7 @@
 </head>
 <body style="font-family: 微软雅黑">
 <div class="container-fluid">
-    <jsp:include page="menu.jsp"></jsp:include>
+    <jsp:include page="/menu.jsp"></jsp:include>
     <%----%>
     <div id="div-cont" class="row text-center">
         <h1 class="h1">

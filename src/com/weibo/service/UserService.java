@@ -32,7 +32,12 @@ public class UserService {
         if (user.getPassword() == null || "".equals(user.getPassword().trim())) {
             return null;
         }
-        return dao.getUser(user);
+        User u = dao.getUser(user);
+        if (u != null) {
+            u.setFollowIdList(dao.getFollowIdList(u));
+            u.setLikeBidSet(dao.getLikeBidSet(u));
+        }
+        return u;
     }
 
     public List<String> checkForRegister(User user, String repassword) throws SQLException {
@@ -63,7 +68,7 @@ public class UserService {
     }
 
     public List<Integer> getFollowIdList(User user) throws SQLException {
-        return dao.getFollowId(user);
+        return dao.getFollowIdList(user);
     }
 
     public void followById(Integer uid, Integer fid) throws SQLException {

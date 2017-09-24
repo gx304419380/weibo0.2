@@ -23,81 +23,116 @@
     <schema id="17" parent="1" name="test1"/>
     <schema id="18" parent="1" name="test2"/>
     <table id="19" parent="2" name="blah"/>
-    <table id="20" parent="2" name="relationship"/>
-    <table id="21" parent="2" name="user"/>
-    <column id="22" parent="19" name="id">
+    <table id="20" parent="2" name="like_map"/>
+    <table id="21" parent="2" name="relationship"/>
+    <table id="22" parent="2" name="user"/>
+    <column id="23" parent="19" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="23" parent="19" name="uid">
+    <column id="24" parent="19" name="uid">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="24" parent="19" name="content">
+    <column id="25" parent="19" name="content">
       <Position>3</Position>
       <DataType>varchar(140)|0</DataType>
     </column>
-    <column id="25" parent="19" name="bdate">
+    <column id="26" parent="19" name="bdate">
       <Position>4</Position>
       <DataType>datetime|0</DataType>
     </column>
-    <column id="26" parent="19" name="pid">
+    <column id="27" parent="19" name="pid">
       <Position>5</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <key id="27" parent="19" name="PRIMARY">
+    <column id="28" parent="19" name="commentcount">
+      <Position>6</Position>
+      <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="29" parent="19" name="likecount">
+      <Position>7</Position>
+      <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="30" parent="19" name="root">
+      <Position>8</Position>
+      <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;-1&apos;</DefaultExpression>
+    </column>
+    <key id="31" parent="19" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="28" parent="20" name="id">
+    <column id="32" parent="20" name="like_id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="29" parent="20" name="uid">
+    <column id="33" parent="20" name="uid">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="30" parent="20" name="fid">
+    <column id="34" parent="20" name="bid">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <key id="31" parent="20" name="PRIMARY">
+    <key id="35" parent="20" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
+      <ColNames>like_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="32" parent="21" name="id">
+    <column id="36" parent="21" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="33" parent="21" name="username">
+    <column id="37" parent="21" name="uid">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="38" parent="21" name="fid">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <key id="39" parent="21" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="40" parent="22" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="41" parent="22" name="username">
       <Position>2</Position>
       <DataType>varchar(20)|0</DataType>
     </column>
-    <column id="34" parent="21" name="password">
+    <column id="42" parent="22" name="password">
       <Position>3</Position>
       <DataType>varchar(20)|0</DataType>
     </column>
-    <column id="35" parent="21" name="email">
+    <column id="43" parent="22" name="email">
       <Position>4</Position>
       <DataType>varchar(30)|0</DataType>
     </column>
-    <column id="36" parent="21" name="rdate">
+    <column id="44" parent="22" name="rdate">
       <Position>5</Position>
       <DataType>date|0</DataType>
     </column>
-    <column id="37" parent="21" name="nickname">
+    <column id="45" parent="22" name="nickname">
       <Position>6</Position>
       <DataType>varchar(30)|0</DataType>
     </column>
-    <key id="38" parent="21" name="PRIMARY">
+    <key id="46" parent="22" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>

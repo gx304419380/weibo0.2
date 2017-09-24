@@ -26,7 +26,7 @@
 </head>
 <body style="font-family: 微软雅黑">
 <div class="container-fluid">
-    <jsp:include page="../../../menu.jsp"></jsp:include>
+    <jsp:include page="/menu.jsp"></jsp:include>
     <%--main--%>
     <div class="row" id="main-div">
         <div class="col-md-1"></div>

@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,16 +65,19 @@ public class GlobalServlet extends HttpServlet {
             e.printStackTrace();
             errors.add("SQL ERROR");
             request.getRequestDispatcher("error.jsp").forward(request, response);
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private String search(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+    private String search(HttpServletRequest request, HttpServletResponse response) throws SQLException, UnsupportedEncodingException {
 
         String keywords = request.getParameter("keywords");
+        keywords = new String(keywords.getBytes("ISO-8859-1"), "utf-8");
         String pageStr = request.getParameter("page");
         System.out.println("search");
         System.out.println(keywords);
+
         int page = 1;
         if (pageStr != null) {
             page = Integer.parseInt(pageStr);
@@ -90,6 +93,8 @@ public class GlobalServlet extends HttpServlet {
         request.setAttribute("totalPage", totalPage);
         List<Blah> blahs = blahService.getResultBlahs(keywords, page, 10);
         request.setAttribute("searchBlahs",blahs);
+//        request.setAttribute("keywords", URLEncoder.encode(keywords, "utf-8"));
+        request.setAttribute("keywords", keywords);
         return "search.jsp";
     }
 

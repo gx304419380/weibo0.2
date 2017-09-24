@@ -2,6 +2,7 @@ package com.weibo.domain;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class User {
     private Integer id;
@@ -12,6 +13,7 @@ public class User {
     private Date rdate;
     private List<Blah> blahs;
     private List<Integer> followIdList;
+    private Set<Integer> likeBidSet;
 
     public User() {
     }
@@ -86,6 +88,14 @@ public class User {
 
     public void setFollowIdList(List<Integer> followIdList) {
         this.followIdList = followIdList;
+    }
+
+    public Set<Integer> getLikeBidSet() {
+        return likeBidSet;
+    }
+
+    public void setLikeBidSet(Set<Integer> likeBidSet) {
+        this.likeBidSet = likeBidSet;
     }
 
     @Override

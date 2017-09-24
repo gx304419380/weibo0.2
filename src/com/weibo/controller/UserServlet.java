@@ -4,6 +4,7 @@ import com.weibo.domain.Blah;
 import com.weibo.domain.User;
 import com.weibo.service.BlahService;
 import com.weibo.service.UserService;
+import com.weibo.util.DataSourceUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,21 +51,28 @@ public class UserServlet extends HttpServlet {
 
             //Authority check!
             String result = checkAuthority(methodName, request);
-            if (result == null)
-                result = (String) method.invoke(this, request, response);
+            if (result == null) {
+                //start transaction
 
+                result = (String) method.invoke(this, request, response);
+                //commit transaction
+
+            }
             String dealMethod = (String) request.getAttribute("dealMethod");
             if (dealMethod == null) {
                 request.getRequestDispatcher(result).forward(request, response);
             } else if (dealMethod.equals("sendRedirect")) {
                 response.sendRedirect(result);
+            } else if (dealMethod.equals("write")) {
+                response.setCharacterEncoding("utf-8");
+                response.getWriter().write(result);
             }
         } catch (NoSuchMethodException e) {
             errorMessage.add("No such method");
             request.getRequestDispatcher("error.jsp").forward(request, response);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             errorMessage.add(e.getCause().toString());
             request.getRequestDispatcher("error.jsp").forward(request, response);
             e.printStackTrace();
@@ -86,6 +94,11 @@ public class UserServlet extends HttpServlet {
     }
 
     private String loginInput(HttpServletRequest request, HttpServletResponse response) {
+        String error = request.getParameter("error");
+        if ("1".equals(error)) {
+            List<String> errormsg = (List<String>)request.getAttribute("errormsg");
+            errormsg.add("用户名或密码错误！");
+        }
         return "/WEB-INF/jsp/user/user_login.jsp";
     }
 
@@ -98,16 +111,15 @@ public class UserServlet extends HttpServlet {
         User user = new User();
         user.setUsername(request.getParameter("username"));
         user.setPassword(request.getParameter("password"));
+        request.setAttribute("dealMethod", "sendRedirect");
         User existUser = userService.getUser(user);
         if (existUser != null) {
-            existUser.setFollowIdList(userService.getFollowIdList(existUser));
             request.getSession().setAttribute("user", existUser);
-            request.setAttribute("dealMethod", "sendRedirect");
             return "user?method=home";
+        } else {
+            return "user?method=loginInput&error=1";
         }
-        List<String> errormsg = (List<String>)request.getAttribute("errormsg");
-        errormsg.add("用户名或密码错误！");
-        return "error.jsp";
+
     }
 
     private String register(HttpServletRequest request, HttpServletResponse response) throws SQLException {
@@ -146,8 +158,8 @@ public class UserServlet extends HttpServlet {
         }
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPage", totalPage);
-        List<Blah> blahs = blahService.getBlahs(user, page, 10);
-        user.setBlahs(blahs);
+        List<Blah> blahs = blahService.getCircleBlahs(user, page, 10);
+        request.setAttribute("circleBlahs", blahs);
 
         return "/WEB-INF/jsp/user/user_circle.jsp";
     }
@@ -174,8 +186,16 @@ public class UserServlet extends HttpServlet {
     }
 
     private String deleteBlah(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        User user = (User)request.getSession().getAttribute("user");
         int blahId = Integer.parseInt(request.getParameter("blahId"));
         //whether need to check the authority here?
+        //check out if the blah to be deleted is the current user's blah
+        Blah blah = blahService.getBlahById(blahId);
+        if (blah == null || blah.getUid() != user.getId()) {
+            List<String> errormsg = (List<String>)request.getAttribute("errormsg");
+            errormsg.add("你没有权限删除不属于你的言论！");
+            return "error.jsp";
+        }
         blahService.deleteById(blahId);
         return "user?method=home";
     }
@@ -188,6 +208,7 @@ public class UserServlet extends HttpServlet {
         blah.setUid(user.getId());
         blah.setBdate(new Date());
         blah.setPid(-1);
+        blah.setRoot(-1);
 
         request.setAttribute("dealMethod", "sendRedirect");
 
@@ -200,11 +221,83 @@ public class UserServlet extends HttpServlet {
         return "user?method=home";
     }
 
+    private String comment(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        String content = request.getParameter("content");
+        String pid = request.getParameter("pid");
+        String root = request.getParameter("root");
+
+        User user = (User) request.getSession().getAttribute("user");
+        Blah blah = new Blah();
+        blah.setContent(content);
+        blah.setUid(user.getId());
+        blah.setBdate(new Date());
+        blah.setPid(Integer.parseInt(pid));
+        blah.setRoot(Integer.parseInt(root));
+        blah.setNickname(user.getNickname());
+
+        request.setAttribute("dealMethod", "write");
+        if (blah.getContent().length() >140) {
+            blah.setContent(blah.getContent().substring(0, 140));
+        } else if (blah.getContent().trim().length() == 0) {
+            return "comment error: content is null";
+        }
+
+        blahService.save(blah);
+        String result = "<li class=\"list-group-item\" style=\"background-color: #d8d7d9\">" +
+                blah.getNickname() +
+                "</li>\n" +
+                "<div class=\"panel-body\">\n" +
+                "<p>" +
+                blah.getContent() +
+                "</p>\n" +
+                "</div>\n";
+        return "success" + result;
+    }
+
+    private String getComment(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        User user = (User)request.getSession().getAttribute("user");
+        String pageStr = request.getParameter("page");
+        int root = Integer.parseInt(request.getParameter("root"));
+
+        int page = 1;
+        if (pageStr != null) {
+            page = Integer.parseInt(pageStr);
+        }
+        int totalPage = (blahService.getCommentCountByRoot(root) - 1) / 10 + 1;
+        if (page > totalPage) {
+            request.setAttribute("dealMethod", "write");
+            return "";
+        }
+        if (page < 1) {
+            page = 1;
+        }
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPage", totalPage);
+        List<Blah> comments = blahService.getCommentByRoot(root, page, 10);
+
+        StringBuilder result = new StringBuilder();
+        if (comments != null) {
+            result.append("success");
+            for (Blah comment:comments) {
+                result.append("<li class=\"list-group-item\" style=\"background-color: #d8d7d9\">" +
+                        comment.getNickname() +
+                        "</li>\n" +
+                        "<div class=\"panel-body\">\n" +
+                        "<p>" +
+                        comment.getContent() +
+                        "</p>\n" +
+                        "</div>\n");
+            }
+        }
+        request.setAttribute("dealMethod", "write");
+        return result.toString();
+    }
+
     private String follow(HttpServletRequest request, HttpServletResponse response) throws SQLException {
         User user = (User)request.getSession().getAttribute("user");
         int id = Integer.parseInt(request.getParameter("id"));
         System.out.println("follow");
-        System.out.println(user);
+        System.out.println(user.getNickname());
         System.out.println(id);
         List<Integer> followIdList = userService.getFollowIdList(user);
         if (!followIdList.contains(id)) {
@@ -212,20 +305,47 @@ public class UserServlet extends HttpServlet {
             user.getFollowIdList().add(id);
         }
 
-        return "";
+        request.setAttribute("dealMethod", "write");
+        return "follow success";
     }
 
     private String unFollow(HttpServletRequest request, HttpServletResponse response) throws SQLException {
         User user = (User)request.getSession().getAttribute("user");
         int id = Integer.parseInt(request.getParameter("id"));
         System.out.println("unFollow");
-        System.out.println(user);
+        System.out.println(user.getNickname());
         System.out.println(id);
         if (user.getFollowIdList().contains(id)) {
             userService.unFollowById(user.getId(), id);
             user.getFollowIdList().remove((Integer)id);
         }
 
-        return "";
+        request.setAttribute("dealMethod", "write");
+        return "unFollow success";
     }
+
+    private String like(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        User user = (User)request.getSession().getAttribute("user");
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        int likeCount = blahService.likeById(user.getId(), id);
+        user.getLikeBidSet().add(id);
+        System.out.println(user.getLikeBidSet());
+
+        request.setAttribute("dealMethod", "write");
+        return "like success: " + likeCount;
+    }
+
+    private String dislike(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        User user = (User)request.getSession().getAttribute("user");
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        int likeCount = blahService.dislikeById(user.getId(), id);
+        user.getLikeBidSet().remove((Integer)id);
+        System.out.println(user.getLikeBidSet());
+
+        request.setAttribute("dealMethod", "write");
+        return "dislike success: " + likeCount;
+    }
+
 }

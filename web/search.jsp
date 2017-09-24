@@ -26,24 +26,12 @@
             background-repeat:repeat-y;
         }
     </style>
-    <script>
-        function like(obj) {
-            if ($(obj).find("span").hasClass("glyphicon-heart-empty"))
-                $(obj).find("span").removeClass("glyphicon-heart-empty").addClass("glyphicon-heart");
-            else
-                $(obj).find("span").removeClass("glyphicon-heart").addClass("glyphicon-heart-empty");
-        }
-        function unfollow1(obj) {
-            $(obj).addClass("btn-danger").removeClass("btn-default").text("取消关注");
-        }
-        function unfollow2(obj) {
-            $(obj).removeClass("btn-danger").addClass("btn-default").text("已关注");
-        }
+    <script src="js/weibo-global.js">
     </script>
 </head>
 <body style="font-family: 微软雅黑">
 <div class="container-fluid">
-    <jsp:include page="menu.jsp"></jsp:include>
+    <jsp:include page="/menu.jsp"></jsp:include>
     <div id="div-main" class="row">
         <div class="page-header row">
             <h1>
@@ -61,21 +49,23 @@
 
             <nav>
                 <ul class="pager">
-                    <li class="previous"><a href="global?method=search&page=${currentPage - 1}">&larr; 上一页</a></li>
+                    <li class="previous"><a href="global?method=search&page=${currentPage - 1}&keywords=${keywords}">&larr; 上一页</a></li>
                     <li>
                         <button class="btn btn-primary" type="button">
                             第${currentPage}页
                         </button>
                     </li>
-                    <li class="next"><a href="global?method=search&page=${currentPage + 1}">下一页 &rarr;</a></li>
+                    <li class="next"><a href="global?method=search&page=${currentPage + 1}&keywords=${keywords}">下一页 &rarr;</a></li>
                 </ul>
             </nav>
-
             <c:choose>
                 <c:when test="${empty searchBlahs}">
                     <h3>
                         对不起，未找到您要搜索的微博和用户。>_<
                     </h3>
+                    <h4>
+                        搜索关键字：${keywords}
+                    </h4>
                 </c:when>
                 <c:otherwise>
                     <c:forEach var="blah" items="${searchBlahs}">
@@ -130,21 +120,21 @@
             <div class="row text-center" style="height: 200px">
                 <nav>
                     <ul class="pagination">
-                        <li><a href="global?method=search&page=${currentPage - 1}">&laquo;</a></li>
+                        <li><a href="global?method=search&page=${currentPage - 1}&keywords=${keywords}">&laquo;</a></li>
                         <c:if test="${currentPage - 2 >= 1}">
-                            <li><a href="global?method=search&page=${currentPage - 2}">${currentPage - 2}</a></li>
+                            <li><a href="global?method=search&page=${currentPage - 2}&keywords=${keywords}">${currentPage - 2}</a></li>
                         </c:if>
                         <c:if test="${currentPage - 1 >= 1}">
-                            <li><a href="global?method=search&page=${currentPage - 1}">${currentPage - 1}</a></li>
+                            <li><a href="global?method=search&page=${currentPage - 1}&keywords=${keywords}">${currentPage - 1}</a></li>
                         </c:if>
                         <li class="active"><a href="#">${currentPage}<span class="sr-only">(current)</span></a></li>
                         <c:if test="${currentPage + 1 <= totalPage}">
-                            <li><a href="global?method=search&page=${currentPage + 1}">${currentPage + 1}</a></li>
+                            <li><a href="global?method=search&page=${currentPage + 1}&keywords=${keywords}">${currentPage + 1}</a></li>
                         </c:if>
                         <c:if test="${currentPage + 2 <= totalPage}">
-                            <li><a href="global?method=search&page=${currentPage + 2}">${currentPage + 2}</a></li>
+                            <li><a href="global?method=search&page=${currentPage + 2}&keywords=${keywords}">${currentPage + 2}</a></li>
                         </c:if>
-                        <li><a href="global?method=search&page=${currentPage + 1}">&raquo;</a></li>
+                        <li><a href="global?method=search&page=${currentPage + 1}&keywords=${keywords}">&raquo;</a></li>
                     </ul>
                 </nav>
             </div>

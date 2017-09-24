@@ -26,24 +26,11 @@
             background-repeat:repeat-y;
         }
     </style>
-    <script>
-        function like(obj) {
-            if ($(obj).find("span").hasClass("glyphicon-heart-empty"))
-                $(obj).find("span").removeClass("glyphicon-heart-empty").addClass("glyphicon-heart");
-            else
-                $(obj).find("span").removeClass("glyphicon-heart").addClass("glyphicon-heart-empty");
-        }
-        function unfollow1(obj) {
-            $(obj).addClass("btn-danger").removeClass("btn-default").text("取消关注");
-        }
-        function unfollow2(obj) {
-            $(obj).removeClass("btn-danger").addClass("btn-default").text("已关注");
-        }
-    </script>
+    <script src="js/weibo-global.js"></script>
 </head>
 <body style="font-family: 微软雅黑">
 <div class="container-fluid">
-    <jsp:include page="menu.jsp"></jsp:include>
+    <jsp:include page="/menu.jsp"></jsp:include>
     <div id="div-main" class="row">
         <div class="page-header row">
             <h1>
@@ -77,14 +64,13 @@
                 </c:when>
                 <c:otherwise>
                     <c:forEach var="blah" items="${hotBlahs}">
-                        <div class="row">
+                        <div class="row uid${blah.uid}">
                             <div class="panel panel-info">
                                 <div class="panel-heading">
                                     <span href="#" class="btn btn-link" style="margin: -6px -10px -5px -10px">
                                             ${blah.nickname}
                                     </span>
                                         <%--<a href="#" class="btn btn-xs btn-success glyphicon glyphicon-ok" style="margin-top: -6px; margin-bottom: -3px"></a>--%>
-
                                     <c:set var="isFollowed" value="false"></c:set>
                                     <c:if test="${user != null}">
                                         <c:forEach var="id" items="${user.followIdList}">
@@ -96,15 +82,15 @@
 
                                     <c:choose>
                                         <c:when test="${isFollowed}">
-                                            <a href="user?method=unFollow&id=${blah.uid}" onmouseover="unfollow1(this)" onmouseleave="unfollow2(this)" class="btn btn-xs btn-default" style="margin-top: -6px; margin-bottom: -3px">
+                                            <button onclick="unfollow(${blah.uid})" onmouseover="unfollow1(this)" onmouseout="unfollow2(this)" class="btn btn-xs btn-default" style="margin-top: -6px; margin-bottom: -3px">
                                                 已关注
-                                            </a>
+                                            </button>
                                         </c:when>
                                         <c:otherwise>
-                                            <c:if test="${user == null || user.id != blah.id}">
-                                                <a href="user?method=follow&id=${blah.uid}" class="btn btn-xs btn-success" style="margin-top: -6px; margin-bottom: -3px">
+                                            <c:if test="${user == null || user.id != blah.uid}">
+                                                <button onclick="follow(${blah.uid})" class="btn btn-xs btn-success" style="margin-top: -6px; margin-bottom: -3px">
                                                     关注
-                                                </a>
+                                                </button>
                                             </c:if>
                                         </c:otherwise>
                                     </c:choose>
@@ -118,9 +104,32 @@
                                     &nbsp;&nbsp;${blah.content}
                                 </div>
                                 <div class="panel-footer text-right">
-                                    <a href="#" class="btn btn-sm" style="background-color: #44bceb;color: white;">评论&nbsp;<span class="glyphicon glyphicon-comment"></span></a>
-                                    <a class="btn btn-sm" id="like-${blah.id}" onclick="like(this)" style="background-color: #eb2b1d;color: white;">点赞&nbsp;<span class="glyphicon glyphicon-heart-empty"></span></a>
+                                    <a class="btn btn-sm" onclick="listcomment(this, ${blah.id})" style="background-color: #44bceb;color: white;">评论&nbsp;
+                                        <span class="glyphicon glyphicon-comment"></span>
+                                        <span class="badge" id="comment-count-${blah.id}">${blah.commentcount}</span>
+
+                                    </a>
+                                    <a class="btn btn-sm" id="like-${blah.id}" onclick="like(this,${blah.id})" style="background-color: #eb2b1d;color: white;">点赞&nbsp;
+                                        <c:set var="isLiked" value="false"></c:set>
+                                        <c:if test="${user != null}">
+                                            <c:forEach var="bid" items="${user.likeBidSet}">
+                                                <c:if test="${bid == blah.id}">
+                                                    <c:set var="isLiked" value="true"></c:set>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:if>
+                                        <c:choose>
+                                            <c:when test="${isLiked}">
+                                                <span class="glyphicon glyphicon-heart"></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="glyphicon glyphicon-heart-empty"></span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <span class="badge">${blah.likecount}</span>
+                                    </a>
                                 </div>
+                                <%@ include file="/comment-div.jsp"%>
                             </div>
                         </div>
                     </c:forEach>

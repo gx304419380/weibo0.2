@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: 别点我我怕疼
@@ -25,11 +26,12 @@
 </head>
 <body style="font-family: 微软雅黑">
 <div class="container-fluid">
-    <jsp:include page="../../../menu.jsp"></jsp:include>
+    <jsp:include page="/menu.jsp"></jsp:include>
     <%--main--%>
     <div class="row" id="main-div">
         <div class="col-md-1"></div>
         <div class="col-md-4">
+
             <form role="form" method="post" action="user?method=login">
                 <div class="form-group">
                     <label for="username">用户名</label>
@@ -39,7 +41,14 @@
                     <label for="password">密码</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码">
                 </div>
-
+                <div class="form-group">
+                    <label for="password">验证码</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span style="text-align: center">516+5659=?</span>
+                    <input type="password" class="form-control" id="code" name="code" placeholder="请输入答案">
+                </div>
+                <c:if test="${!empty errormsg}">
+                    <span style="color: red">${errormsg[0]}</span>
+                </c:if>
                 <button type="submit" class="btn btn-block btn-info">登陆</button>
             </form>
             <div class="row">

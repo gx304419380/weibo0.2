@@ -16,7 +16,7 @@
 </head>
 <body style="font-family: 微软雅黑">
 <div class="container-fluid">
-    <jsp:include page="../../../menu.jsp"></jsp:include>
+    <jsp:include page="/menu.jsp"></jsp:include>
     <%--main--%>
     <h1>恭喜你，注册成功！</h1>
     <a class="btn btn-primary btn-block" href="user?method=loginInput">登陆</a>

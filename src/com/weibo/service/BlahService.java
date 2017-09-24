@@ -24,6 +24,12 @@ public class BlahService {
 
     public void save(Blah blah) throws SQLException {
         dao.save(blah);
+        int root = 0;
+        if ((root = blah.getRoot()) > 0) {
+            Blah b = dao.getBlahById(root);
+            b.setCommentcount(b.getCommentcount() + 1);
+            dao.updateBlah(b);
+        }
     }
 
     public List<Blah> getBlahs(User user, int page, int count) throws SQLException {
@@ -58,5 +64,50 @@ public class BlahService {
             return getAllBlahs(page, count);
         }
         return dao.getResultBlahs(keywords ,page, count);
+    }
+
+    public List<Blah> getCircleBlahs(User user, int page, int count) throws SQLException {
+        return dao.getCircleBlahs(user, page, count);
+    }
+
+    public Blah getBlahById(int blahId) throws SQLException {
+        return dao.getBlahById(blahId);
+    }
+
+    public int likeById(int uid, int bid) throws SQLException {
+        //begin the transaction
+        Blah blah = dao.getBlahById(bid);
+        int likeCount = blah.getLikecount();
+        if (!dao.isLike(uid, bid)) {
+            dao.setLike(uid, bid);
+            blah.setLikecount(++likeCount);
+            dao.updateBlah(blah);
+        }
+        //commit
+        return likeCount;
+    }
+
+    public int dislikeById(int uid, int bid) throws SQLException {
+        //begin the transaction
+        Blah blah = dao.getBlahById(bid);
+        int likeCount = blah.getLikecount();
+        if (likeCount <= 0) {
+            return 0;
+        }
+        if (dao.isLike(uid, bid)) {
+            dao.deleteLike(uid, bid);
+            blah.setLikecount(--likeCount);
+            dao.updateBlah(blah);
+        }
+        //end the transaction
+        return likeCount;
+    }
+
+    public int getCommentCountByRoot(int root) throws SQLException {
+        return dao.getCommentCountByRoot(root);
+    }
+
+    public List<Blah> getCommentByRoot(int root, int page, int count) throws SQLException {
+        return dao.getCommentByRoot(root, page, count);
     }
 }

@@ -35,7 +35,8 @@
                     <li><a href="user?method=registerInput" class="btn btn-warning" style="color: white;">注册</a></li>
                 </ul>
 
-                <form action="global?method=search" method="post" class="navbar-form navbar-right" role="search">
+                <form action="global" method="get" class="navbar-form navbar-right" role="search">
+                    <input type="hidden" name="method" value="search" />
                     <div class="form-group">
                         <input type="text" class="form-control" name="keywords" placeholder="搜索新鲜事">
                     </div>

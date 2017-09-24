@@ -9,6 +9,9 @@ public class Blah {
     private Date bdate;
     private int pid;
     private String nickname;
+    private int commentcount;
+    private int likecount;
+    private int root;
 
     public Blah() {
     }
@@ -61,6 +64,30 @@ public class Blah {
         this.nickname = nickname;
     }
 
+    public int getCommentcount() {
+        return commentcount;
+    }
+
+    public void setCommentcount(int commentcount) {
+        this.commentcount = commentcount;
+    }
+
+    public int getLikecount() {
+        return likecount;
+    }
+
+    public void setLikecount(int likecount) {
+        this.likecount = likecount;
+    }
+
+    public int getRoot() {
+        return root;
+    }
+
+    public void setRoot(int root) {
+        this.root = root;
+    }
+
     @Override
     public String toString() {
         return "Blah{" +
@@ -70,6 +97,9 @@ public class Blah {
                 ", bdate=" + bdate +
                 ", pid=" + pid +
                 ", nickname='" + nickname + '\'' +
+                ", commentcount=" + commentcount +
+                ", likecount=" + likecount +
+                ", root=" + root +
                 '}';
     }
 }

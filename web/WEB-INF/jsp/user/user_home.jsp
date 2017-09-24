@@ -26,16 +26,8 @@
             background-repeat:repeat-y;
         }
     </style>
+    <script src="js/weibo-global.js"></script>
     <script>
-        function like(obj) {
-
-            if ($(obj).find("span").hasClass("glyphicon-heart-empty"))
-                $(obj).find("span").removeClass("glyphicon-heart-empty").addClass("glyphicon-heart");
-            else
-                $(obj).find("span").removeClass("glyphicon-heart").addClass("glyphicon-heart-empty");
-
-        }
-        
         function confirmDelete() {
             return confirm("确认删除？");
         }
@@ -43,7 +35,7 @@
 </head>
 <body style="font-family: 微软雅黑">
 <div class="container-fluid">
-    <jsp:include page="../../../menu.jsp"></jsp:include>
+    <jsp:include page="/menu.jsp"></jsp:include>
     <div id="div-main" class="row">
         <div class="page-header row">
             <h1>亲爱的：${user.nickname}，欢迎来到微博！</h1>
@@ -104,9 +96,31 @@
                         </div>
                         <div class="panel-footer text-right">
                             <a href="user?method=deleteBlah&blahId=${blah.id}" onclick="return confirmDelete()" class="btn btn-sm" style="background-color: #449d44;color: white;">删除&nbsp;<span class="glyphicon glyphicon-trash"></span></a>
-                            <a href="#" class="btn btn-sm" style="background-color: #44bceb;color: white;">评论&nbsp;<span class="glyphicon glyphicon-comment"></span></a>
-                            <a class="btn btn-sm" id="like-${blah.id}" onclick="like(this)" style="background-color: #eb2b1d;color: white;">点赞&nbsp;<span class="glyphicon glyphicon-heart-empty"></span></a>
+                            <a class="btn btn-sm" onclick="listcomment(this, ${blah.id})" style="background-color: #44bceb;color: white;">评论&nbsp;
+                                <span class="glyphicon glyphicon-comment"></span>
+                                <span class="badge" id="comment-count-${blah.id}">${blah.commentcount}</span>
+                            </a>
+                            <a class="btn btn-sm" id="like-${blah.id}" onclick="like(this,${blah.id})" style="background-color: #eb2b1d;color: white;">点赞&nbsp;
+                                <c:set var="isLiked" value="false"></c:set>
+
+                                <c:forEach var="bid" items="${user.likeBidSet}">
+                                    <c:if test="${bid == blah.id}">
+                                        <c:set var="isLiked" value="true"></c:set>
+                                    </c:if>
+                                </c:forEach>
+
+                                <c:choose>
+                                    <c:when test="${isLiked}">
+                                        <span class="glyphicon glyphicon-heart"></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="glyphicon glyphicon-heart-empty"></span>
+                                    </c:otherwise>
+                                </c:choose>
+                                <span class="badge">${blah.likecount}</span>
+                            </a>
                         </div>
+                        <%@ include file="/comment-div.jsp"%>
                     </div>
                 </div>
             </c:forEach>
